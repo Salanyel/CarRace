@@ -5,9 +5,10 @@
 /*
 Constructor & Destructor
 */
+
 Car::Car(float _x, float _y, float a, float s) : x(_x), y(_y), angle(a), speed(s)
 {
-
+	m_coefficient = 1;
 }
 
 /*
@@ -39,8 +40,8 @@ Others
 
 void Car::move()
 {
-	x += cos(angle * M_PI / 180) * speed;
-	y += sin(angle * M_PI / 180) * speed;
+	x += cos(angle * M_PI / 180) * m_coefficient * speed;
+	y += sin(angle * M_PI / 180) * m_coefficient * speed;
 }
 
 void Car::turnLeft()
@@ -55,13 +56,17 @@ void Car::turnRight()
 
 void Car::speedUp()
 {
-	if (speed <= 5.f)
-		speed += 0.05f;
+	if (speed <= m_speedMax )
+		speed += m_speedValue;
 }
 
 void Car::speedDown()
 {
-	if (speed >= 0)
-		speed -= 0.05;
+	if (speed >= m_speedMin)
+		speed -= m_speedValue;
 }
 
+void Car::coefficientDown()
+{
+	m_coefficient -= m_speedValue;
+}

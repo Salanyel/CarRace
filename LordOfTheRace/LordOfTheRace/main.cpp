@@ -10,15 +10,16 @@ const int WINDOW_HEIGHT = 800;
 const int WINDOW_WIDTH = 600;
 const String WINDOW_NAME = "Lord of the race";
 const int FRAME_LIMIT = 32;
+
 int main()
 {
 	RenderWindow app(VideoMode(WINDOW_HEIGHT, WINDOW_WIDTH, 32), WINDOW_NAME);
 	app.setFramerateLimit(FRAME_LIMIT);
 
-	Texture backgroundImage, carImage;
-	Sprite backgroundSprite, carSprite;
+	Texture raceTexture, raceMaskTexture, carImage;
+	Sprite raceSprite, raceMaskSprite, carSprite;
 
-	if (!backgroundImage.loadFromFile("./Assets/Img/race.png"))
+	if (!raceTexture.loadFromFile("./Assets/Img/race01.png"))
 	{
 		cout << "Error during the loading of the race." << endl;
 		return EXIT_FAILURE;
@@ -30,8 +31,16 @@ int main()
 		return EXIT_FAILURE;
 	}
 
-	backgroundSprite.setTexture(backgroundImage);
-	carSprite.setTexture(carImage);
+	if (!raceMaskTexture.loadFromFile("./Assets/Img/mask_race01.png"))
+	{
+		cout << "Error during the loading of the race mask." << endl;
+		return EXIT_FAILURE;
+	}
+
+	raceSprite.setTexture(raceTexture);
+	raceMaskSprite.setTexture(raceMaskTexture);
+	carSprite.setTexture(carImage);	
+
 	carSprite.setOrigin(20, 34);
 	carSprite.setScale(0.5, 0.5);
 
@@ -85,12 +94,14 @@ int main()
 		Display
 		*/
 		app.clear();
-		car.move();			
+		car.move();		
+		cout << "Car : " << car.getSpeed() <<  endl;
 		view.setCenter(car.getX(), car.getY());
-		app.draw(backgroundSprite);
+		app.draw(raceSprite);
 		app.setView(view);
 
-		carSprite.setPosition(car.getX(), car.getY());
+		carSprite.setPosition(car.getX(), car.getY());		
+
 		app.draw(carSprite);
 
 		app.display();

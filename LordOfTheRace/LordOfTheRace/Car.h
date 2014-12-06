@@ -17,12 +17,20 @@ public:
 	void turnRight();
 	void speedUp();
 	void speedDown();
+	void coefficientDown();
 
 protected:
 private:
 	float x, y;
 	float angle;
 	float speed;
+	float m_coefficient;	
+
+	const float m_speedValue = 0.1;
+	const float m_speedMax = 6;
+	const float m_speedMin = 0;
+	const float m_carRadius = 35;
+	
 };
 
 #endif // CAR_H
