@@ -1,6 +1,4 @@
 #include "Car.h"
-#define _USE_MATH_DEFINES // for C++
-#include <cmath>
 
 /*
 Constructor & Destructor
@@ -8,7 +6,7 @@ Constructor & Destructor
 
 Car::Car(float _x, float _y, float a, float s) : x(_x), y(_y), angle(a), speed(s)
 {
-	m_coefficient = 1;
+
 }
 
 /*
@@ -38,10 +36,36 @@ float Car::getAngle()
 Others
 */
 
-void Car::move()
+void Car::move(sf::Image& maskRace)
 {
-	x += cos(angle * M_PI / 180) * m_coefficient * speed;
-	y += sin(angle * M_PI / 180) * m_coefficient * speed;
+	
+	m_nextX = x + cos(angle * M_PI / 180) *  speed;
+	m_nextY = y + sin(angle * M_PI / 180) * speed;
+
+	if (calculateNextMove(maskRace))
+	{
+		x += cos(angle * M_PI / 180) * speed;
+		y += sin(angle * M_PI / 180) * speed;
+	}		
+}
+
+bool Car::calculateNextMove(sf::Image& raceMask)
+{
+	sf::Color nextPos = raceMask.getPixel(m_nextX, m_nextY);
+
+	if (nextPos == sf::Color::Black)
+	{
+		return false;
+		std::cout << "Won't move";
+	}
+	else {
+		std::cout << "Move !";
+	}
+
+	if (nextPos == sf::Color::White)
+		speedDownFast();
+
+	return true;
 }
 
 void Car::turnLeft()
@@ -66,7 +90,10 @@ void Car::speedDown()
 		speed -= m_speedValue;
 }
 
-void Car::coefficientDown()
+void Car::speedDownFast()
 {
-	m_coefficient -= m_speedValue;
+	if (speed - (m_speedValue + 0.05) >= m_limit)
+		speed -= (m_speedValue + 0.05) ;
+	else
+		speed = m_limit;
 }
