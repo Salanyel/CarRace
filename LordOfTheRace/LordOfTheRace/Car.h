@@ -39,7 +39,7 @@ private:
 	float m_nextX;
 	float m_nextY;
 
-	const float m_speedValue = 0.1;
+	const float m_speedValue = 0.1f;
 	const float m_speedMax = 6;
 	const float m_speedMin = 0;
 	const float m_carRadius = 17;

@@ -2,18 +2,32 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Car.h"
+#include "GraphicEngine.h"
 
 using namespace std;
 using namespace sf;
 
-const int WINDOW_HEIGHT = 800;
-const int WINDOW_WIDTH = 600;
+const int WINDOW_WIDTH = 800;//1200
+const int WINDOW_HEIGHT = 600;//900
 const String WINDOW_NAME = "Lord of the race";
 const int FRAME_LIMIT = 32;
 
 int main()
 {
-	RenderWindow app(VideoMode(WINDOW_HEIGHT, WINDOW_WIDTH, 32), WINDOW_NAME);
+	RenderWindow app(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), WINDOW_NAME);
+	GraphicEngine * m_graphicEngine = new GraphicEngine(app);
+
+	string initValue = m_graphicEngine->initGraphicEngine();
+
+	if (initValue != "")
+	{
+		cerr << initValue << endl;
+		return EXIT_FAILURE;
+	}
+	else
+		cout << endl << "####################" << endl << "Graphic engine initialized." << endl << "####################" << endl << endl;
+	
+
 	app.setFramerateLimit(FRAME_LIMIT);
 
 	Texture raceTexture, carImage;
@@ -22,21 +36,27 @@ int main()
 
 	if (!raceTexture.loadFromFile("./Assets/Img/race01.png"))
 	{
-		cout << "Error during the loading of the race." << endl;
+		cerr << "Error during the loading of the race." << endl;
 		return EXIT_FAILURE;
-	}//*/
+	}
+	else
+		cout << "race01 loaded." << endl;
 
 	if (!carImage.loadFromFile("./Assets/Img/car.png"))
 	{
-		cout << "Error during the loading of the car." << endl;
+		cerr << "Error during the loading of the car." << endl;
 		return EXIT_FAILURE;
 	}
+	else
+		cout << "car loaded." << endl;
 
 	if (!raceMask.loadFromFile("./Assets/Img/mask_race01.png"))
 	{
-		cout << "Error during the loading of the race mask." << endl;
+		cerr << "Error during the loading of the race mask." << endl;
 		return EXIT_FAILURE;
 	}
+	else
+		cout << "mask_race01 loaded." << endl;
 
 	raceSprite.setTexture(raceTexture);
 	carSprite.setTexture(carImage);	
@@ -48,8 +68,7 @@ int main()
 
 	Vector2f center(car.getX(), car.getY());
 	Vector2f halfSize(WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4);
-	View view(center, halfSize);
-	app.setView(view);
+	View view(center, halfSize);	
 
 	while (app.isOpen())
 	{
@@ -70,14 +89,20 @@ int main()
 
 		if (Keyboard::isKeyPressed(Keyboard::Left))
 		{
-			car.turnLeft();
-			carSprite.setRotation(car.getAngle());
+			if (car.getSpeed() > 0)
+			{
+				car.turnLeft();
+				carSprite.setRotation(car.getAngle());
+			}			
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Right))
 		{
-			car.turnRight();
-			carSprite.setRotation(car.getAngle());
+			if (car.getSpeed() > 0)
+			{
+				car.turnRight();
+				carSprite.setRotation(car.getAngle());
+			}
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Up))
@@ -94,15 +119,17 @@ int main()
 		Display
 		*/
 		app.clear();
-		car.move(raceMask);
-		view.setCenter(car.getX(), car.getY());						
-
-		cout << car.getSpeed() << endl;
+		car.move(raceMask);								
 
 		app.draw(raceSprite);
+	
+		//This 3 lines are linked. Cause of the "View"
+		m_graphicEngine->draw(car.getSpeed());
 		app.setView(view);
+		view.setCenter(car.getX(), car.getY());
+
 		carSprite.setPosition(car.getX(), car.getY());		
-		app.draw(carSprite);
+		app.draw(carSprite);		
 
 		app.display();
 	}

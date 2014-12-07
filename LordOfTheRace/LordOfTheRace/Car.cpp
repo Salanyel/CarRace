@@ -54,13 +54,7 @@ bool Car::calculateNextMove(sf::Image& raceMask)
 	sf::Color nextPos = raceMask.getPixel(m_nextX, m_nextY);
 
 	if (nextPos == sf::Color::Black)
-	{
 		return false;
-		std::cout << "Won't move";
-	}
-	else {
-		std::cout << "Move !";
-	}
 
 	if (nextPos == sf::Color::White)
 		speedDownFast();
@@ -88,6 +82,10 @@ void Car::speedDown()
 {
 	if (speed >= m_speedMin)
 		speed -= m_speedValue;
+
+	if (speed < 0)
+		speed = 0;
+
 }
 
 void Car::speedDownFast()
