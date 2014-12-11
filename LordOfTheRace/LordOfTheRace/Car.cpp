@@ -6,7 +6,8 @@ Constructor & Destructor
 
 Car::Car(float _x, float _y, float a, float s) : x(_x), y(_y), angle(a), speed(s)
 {
-
+	m_currentLap = 1;
+	m_nextLap = false;
 }
 
 /*
@@ -32,6 +33,11 @@ float Car::getAngle()
 	return angle;
 }
 
+float Car::getLap()
+{
+	return m_currentLap;
+}
+
 /*
 Others
 */
@@ -42,19 +48,36 @@ void Car::move(sf::Image& maskRace)
 	m_nextX = x + cos(angle * M_PI / 180) *  speed;
 	m_nextY = y + sin(angle * M_PI / 180) * speed;
 
-	if (calculateNextMove(maskRace))
+	if (calculateMaskCollision(maskRace))
 	{
 		x += cos(angle * M_PI / 180) * speed;
 		y += sin(angle * M_PI / 180) * speed;
 	}		
 }
 
-bool Car::calculateNextMove(sf::Image& raceMask)
+bool Car::calculateMaskCollision(sf::Image& raceMask)
 {
 	sf::Color nextPos = raceMask.getPixel(m_nextX, m_nextY);
 
 	if (nextPos == sf::Color::Black)
+	{
+		speedDownFast();
 		return false;
+	}
+
+	if (nextPos == sf::Color(255, 255, 0))
+	{
+		m_nextLap = true;
+	}
+
+	if (nextPos == sf::Color(0, 0, 128))
+	{
+		if (m_nextLap)
+		{
+			m_currentLap++;
+			m_nextLap = false;
+		}
+	}
 
 	if (nextPos == sf::Color::White)
 		speedDownFast();
@@ -65,7 +88,7 @@ bool Car::calculateNextMove(sf::Image& raceMask)
 void Car::turnLeft()
 {
 	angle -= 2.f;
-}
+} 
 
 void Car::turnRight()
 {
@@ -74,8 +97,10 @@ void Car::turnRight()
 
 void Car::speedUp()
 {
-	if (speed <= m_speedMax )
+	if (speed <= m_speedMax)
 		speed += m_speedValue;
+	else
+		speed = 6.1;
 }
 
 void Car::speedDown()

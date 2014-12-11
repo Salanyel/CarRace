@@ -19,9 +19,10 @@ public:
 	float getY();
 	float getAngle();
 	float getSpeed();
+	float getLap();
 
 	void move(sf::Image& raceMask);
-	bool calculateNextMove(sf::Image& raceMask);
+	bool calculateMaskCollision(sf::Image& raceMask);
 	void turnLeft();
 	void turnRight();
 	void speedUp();
@@ -38,7 +39,8 @@ private:
 	
 	float m_nextX;
 	float m_nextY;
-
+	bool m_nextLap;
+	int m_currentLap;
 	const float m_speedValue = 0.1f;
 	const float m_speedMax = 6;
 	const float m_speedMin = 0;

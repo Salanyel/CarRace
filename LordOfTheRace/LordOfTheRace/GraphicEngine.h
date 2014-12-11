@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include "Chronometer.h"
 
 class GraphicEngine
 {
@@ -16,10 +17,14 @@ public:
 	std::string initGraphicEngine();
 	std::string loadTexture();
 	std::string initText();
+	sf::Text getText();
 	void loadSprite();
 	void initView();
 	void initVar();
-	void draw(float speed);	
+	void newLap();
+	void setTextForDraw(float speed, int lap, int maxLap);
+	void draw(float speed, int lap, int maxLap);
+	void drawFinalScreen();
 
 private:
 
@@ -27,7 +32,6 @@ private:
 	sf::View viewMeter;
 
 	//Speed meter
-	SpeedMeter m_speledMeter;
 	sf::Texture m_T_speedMeter;
 	sf::Sprite m_S_speedMeter;	
 	
@@ -37,18 +41,29 @@ private:
 	
 	//Text
 	sf::Text m_speedText;	
-	sf::Font m_font;
+	sf::Text m_lap;
+	sf::Text m_finalScreen;
+	sf::Text m_currentTimer;
+	sf::Text m_bestLapText;
+	sf::Font m_font;	
+
+	//Chronometer
+	Chronometer m_chronometer;
+
+	int m_bestLap = -1;
 
 	const double m_speedMeterScale = 0.1;
 	const double m_handScale = 0.15;
-	const double SPEED_METER_X = 0;
-	const double SPEED_METER_Y = 800;	
-	const double HAND_BEGIN_POSITION = -110;
-	const double SPEED_ADAPTOR = 20.98;
-	//Min : -110 // Max : 18
-
-	const int VIEW_SIZE_X = 200;
-	const int VIEW_SIZE_Y = 200;
+	const double SPEED_METER_X = 100;
+	const double SPEED_METER_Y = 600;	
+	const double HAND_BEGIN_POSITION = -123;
+	//Min : -123 // Max : 115
+	const double SPEED_ADAPTOR = 39.016;
+	const double SPEED_ADAPTATOR_TEXT = 32.787;
+	const int HAND_X = 220;
+	const int HAND_Y = 725;	
+	const int VIEW_SIZE_X = 800;
+	const int VIEW_SIZE_Y = 600;
 	
 };
 
