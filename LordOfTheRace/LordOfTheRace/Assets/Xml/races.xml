@@ -1,0 +1,18 @@
+<Races>
+	<Race id="01">	
+		<Name value = "Great Speadway" />
+		<CarX value = "790" />
+		<CarY value = "1215" />
+		<Angle value = "0" />
+		<Speed value = "0" />
+		<Lap value = "3" />
+	</Race>
+	<Race id="02">	
+		<Name value = "TTT" />
+		<CarX value = "820" />
+		<CarY value = "339" />
+		<Angle value = "0" />
+		<Speed value = "0" />
+		<Lap value = "3" />
+	</Race>
+</Races>

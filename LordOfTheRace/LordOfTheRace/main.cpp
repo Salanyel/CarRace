@@ -4,6 +4,7 @@
 #include "Car.h"
 #include "GraphicEngine.h"
 #include "CXBOXController.h"
+#include "XmlLoader.h"
 
 using namespace std;
 using namespace sf;
@@ -12,15 +13,17 @@ const int WINDOW_WIDTH = 800;//1200
 const int WINDOW_HEIGHT = 600;//900
 const String WINDOW_NAME = "Lord of the race";
 const int FRAME_LIMIT = 32;
-const int LAP_MAX = 3;
+int LAP_MAX = 3;
 
 int main()
 {
 	RenderWindow app(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32), WINDOW_NAME);
 	GraphicEngine * m_graphicEngine = new GraphicEngine(app);
+	XmlLoader * m_xmlLoader = new XmlLoader();
 	int currentLap;
 	int previousLap = 1;
 	string initValue = m_graphicEngine->initGraphicEngine();
+	string initValue2 = m_xmlLoader->loadFile();
 	int m_gamePadDirection = 0;
 
 	//TODO : XInput
@@ -30,7 +33,7 @@ int main()
 	Player2 = new CXBOXController(2);
 	XINPUT_STATE m_state;
 
-	if (initValue != "")
+	if (initValue != "" || initValue2 != "")
 	{
 		cerr << initValue << endl;
 		return EXIT_FAILURE;
@@ -45,40 +48,26 @@ int main()
 	Image raceMask;
 	Sprite raceSprite, carSprite;
 
-	if (!raceTexture.loadFromFile("./Assets/Img/race01.png"))
-	{
-		cerr << "Error during the loading of the race." << endl;
-		return EXIT_FAILURE;
-	}
-	else
-		cout << "race01 loaded." << endl;
+	//Car car(790, 1215, 0, 0);
+	Car car;
 
-	if (!carImage.loadFromFile("./Assets/Img/car.png"))
-	{
-		cerr << "Error during the loading of the car." << endl;
-		return EXIT_FAILURE;
-	}
-	else
-		cout << "car loaded." << endl;
+	initValue = m_xmlLoader->initGame(1, 1, car, m_graphicEngine, carImage, raceTexture, raceMask, LAP_MAX);
 
-	if (!raceMask.loadFromFile("./Assets/Img/mask_race01.png"))
+	if (initValue != "")
 	{
-		cerr << "Error during the loading of the race mask." << endl;
+		cout << initValue << endl;
 		return EXIT_FAILURE;
-	}
-	else
-		cout << "mask_race01 loaded." << endl;
+	}	
 
 	raceSprite.setTexture(raceTexture);
 	carSprite.setTexture(carImage);	
 
-	carSprite.setOrigin(34, 20);
-	carSprite.setScale(0.5, 0.5);
-
-	Car car(790, 1215, 0, 0);
+	m_xmlLoader->setOrigin(carSprite);
+	//carSprite.setOrigin(34, 20);
+	carSprite.setScale(0.5, 0.5);	
 
 	Vector2f center(car.getX(), car.getY());
-	Vector2f halfSize(WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4);
+	Vector2f halfSize(WINDOW_WIDTH / 3.5, WINDOW_HEIGHT / 3.5);
 	//Vector2f halfSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	View view(center, halfSize);	
 
@@ -89,14 +78,12 @@ int main()
 		m_gamePadDirection = 0;
 
 		float LX = m_state.Gamepad.sThumbLX;
-		float LY = m_state.Gamepad.sThumbLY;
 
 		//determine how far the controller is pushed
-		float magnitude = sqrt(LX*LX + LY*LY);
+		float magnitude = sqrt(LX*LX + LX*LX);
 
 		//determine the direction the controller is pushed
 		float normalizedLX = LX / magnitude;
-		float normalizedLY = LY / magnitude;
 
 		float normalizedMagnitude = 0;
 
@@ -121,8 +108,10 @@ int main()
 				app.close();
 
 			if (event.type == Event::KeyPressed)
+			{
 				if (event.key.code == Keyboard::Escape)
 					app.close();
+			}				
 		}
 
 		/*
@@ -181,13 +170,15 @@ int main()
 			app.draw(raceSprite);
 	
 			//This 3 lines are linked. Cause of the "View"
-			m_graphicEngine->draw(car.getSpeed(), currentLap, 3);
+			m_graphicEngine->setCarOnMiniMap(car.getX(), car.getY());
+			m_graphicEngine->draw(car.getSpeed(), currentLap, LAP_MAX);
 			app.setView(view);
 			view.setCenter(car.getX(), car.getY());
 
 			carSprite.setPosition(car.getX(), car.getY());		
 			app.draw(carSprite);
 		}
+		cout << car.getSpeed() << endl;
 		app.display();
 	}
 

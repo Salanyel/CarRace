@@ -1,0 +1,22 @@
+<Cars value="test">
+	<Car id="01">
+		<Name value="Dodge Viper"/>
+		<SpeedValue value="0.1"/>
+		<SpeedMax value="6"/>
+		<handStep value="23.934" />
+		<speedStep value="19.68" />
+		<OriginX value="34" />
+		<OriginY value="20" />
+		<Image value="car01.png" />			
+	</Car> 
+	<Car id="02">
+		<Name value="Formula 1"/>
+		<SpeedValue value="0.2"/>
+		<SpeedMax value="12"/>
+		<handStep value="15.51" />
+		<speedStep value="16.39" />
+		<OriginX value="40" />
+		<OriginY value="21" />
+		<Image value="car02.png" />		
+	</Car> 	
+</Cars>

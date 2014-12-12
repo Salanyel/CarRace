@@ -60,9 +60,29 @@ string GraphicEngine::loadTexture()
 		return ctrlInitGraphicEngine;
 	}
 	else
-		cout << "hand loaded." << endl;
+		cout << "hand loaded." << endl;	
 
 	return "";	
+}
+
+string GraphicEngine::setMinimap(string id)
+{
+	string ctrlInitGraphicEngine;
+	string path = "./Assets/Img/race" + id + "/minimap.png";
+	if (!m_T_minimap.loadFromFile(path))
+	{
+		ctrlInitGraphicEngine = "Error during the loading of the minimap.";
+		cerr << ctrlInitGraphicEngine << endl;
+		return ctrlInitGraphicEngine;
+	}
+	else
+		cout << "Minimap loaded." << endl;
+
+	m_minimap.setTexture(m_T_minimap);
+	m_minimap.setScale(0.5, 0.5);
+	m_minimap.setPosition(MAP_X, MAP_Y);
+
+	return "";
 }
 
 string GraphicEngine::initText()
@@ -116,7 +136,7 @@ string GraphicEngine::initText()
 }
 
 void GraphicEngine::loadSprite()
-{
+{	
 	m_S_speedMeter.setTexture(m_T_speedMeter);
 	m_S_speedMeter.setScale(m_speedMeterScale, m_speedMeterScale);
 	m_S_speedMeter.setPosition(SPEED_METER_X, SPEED_METER_Y);
@@ -125,7 +145,11 @@ void GraphicEngine::loadSprite()
 	m_S_hand.setScale(m_handScale, m_handScale);
 	m_S_hand.setPosition(HAND_X, HAND_Y);
 	m_S_hand.setOrigin(57, 716);
-	m_S_hand.setRotation(HAND_BEGIN_POSITION);
+	m_S_hand.setRotation(HAND_BEGIN_POSITION);	
+	
+	m_player.setRadius(2.5);
+	m_player.setFillColor(Color::Green);
+	m_player.setPosition(0, 0);
 }
 
 void GraphicEngine::initView()
@@ -136,6 +160,12 @@ void GraphicEngine::initView()
 
 void GraphicEngine::initVar()
 {
+}
+
+void GraphicEngine::setStep(float h, float t)
+{
+	SPEED_ADAPTOR = h;
+	SPEED_ADAPTATOR_TEXT = t;
 }
 
 void GraphicEngine::newLap()
@@ -155,7 +185,6 @@ void GraphicEngine::newLap()
 	if (m_bestLap == -1 || lastLap < m_bestLap)
 	{
 		m_bestLap = lastLap;		
-		cout << m_bestLap << endl;
 
 		milliSeconds = lastLap % 100;
 		lastLap = lastLap / 100;
@@ -177,6 +206,17 @@ void GraphicEngine::newLap()
 	}
 }
 
+void GraphicEngine::setCarOnMiniMap(int x, int y)
+{
+	int newX, newY;
+
+	window.setView(viewMeter);
+	newX = MAP_X + (x * 400 / 2000)/2;
+	newY = MAP_Y + (y * 300 / 1500)/2;
+
+	m_player.setPosition(newX, newY);
+}
+
 void GraphicEngine::setTextForDraw(float speed, int lap, int maxLap)
 {
 	ostringstream ss;
@@ -192,6 +232,10 @@ void GraphicEngine::setTextForDraw(float speed, int lap, int maxLap)
 	int minutes;
 
 	m_S_hand.setRotation(speed * SPEED_ADAPTOR + HAND_BEGIN_POSITION);
+	//Min : -123 = 0km/h // Max : 115 = 200km/h
+	
+	//m_S_hand.setRotation(23);
+
 	tmp = speed*SPEED_ADAPTATOR_TEXT;
 	ss << tmp;
 	tmpLap = "Lap : " + to_string(lap) + " / " + to_string(maxLap);
@@ -225,14 +269,16 @@ void GraphicEngine::setTextForDraw(float speed, int lap, int maxLap)
 void GraphicEngine::draw(float speed, int lap, int maxLap)
 {
 	m_chronometer.getTimer();
-	setTextForDraw(speed, lap, maxLap);
-	window.setView(viewMeter);		
+	window.setView(viewMeter);
+	setTextForDraw(speed, lap, maxLap);	
 	window.draw(m_S_speedMeter);			
 	window.draw(m_S_hand);
 	window.draw(m_lap);
 	window.draw(m_speedText);	
 	window.draw(m_bestLapText);
 	window.draw(m_currentTimer);
+	window.draw(m_minimap);
+	window.draw(m_player);
 }
 
 void GraphicEngine::drawFinalScreen()
