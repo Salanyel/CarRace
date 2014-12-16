@@ -134,12 +134,24 @@ bool Car::calculateMaskCollision(sf::Image& raceMask)
 
 void Car::turnLeft()
 {
-	angle -= 2.f;
+	float turn = 4.f;
+	float coef = 1 - (speed / m_speedMax);
+
+	if (coef < 0.5)
+		coef = 0.5;
+	
+	angle -= (coef * turn);
 } 
 
 void Car::turnRight()
 {
-	angle += 2.f;
+	float turn = 4.f;
+	float coef = 1 - (speed / m_speedMax);
+
+	if (coef < 0.5)
+		coef = 0.5;
+
+	angle += (coef * turn);
 }
 
 void Car::speedUp()

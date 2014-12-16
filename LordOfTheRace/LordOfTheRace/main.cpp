@@ -51,7 +51,7 @@ int main()
 	//Car car(790, 1215, 0, 0);
 	Car car;
 
-	initValue = m_xmlLoader->initGame(1, 1, car, m_graphicEngine, carImage, raceTexture, raceMask, LAP_MAX);
+	initValue = m_xmlLoader->initGame(2, 1, car, m_graphicEngine, carImage, raceTexture, raceMask, LAP_MAX);
 
 	if (initValue != "")
 	{
@@ -63,7 +63,6 @@ int main()
 	carSprite.setTexture(carImage);	
 
 	m_xmlLoader->setOrigin(carSprite);
-	//carSprite.setOrigin(34, 20);
 	carSprite.setScale(0.5, 0.5);	
 
 	Vector2f center(car.getX(), car.getY());
@@ -178,7 +177,6 @@ int main()
 			carSprite.setPosition(car.getX(), car.getY());		
 			app.draw(carSprite);
 		}
-		cout << car.getSpeed() << endl;
 		app.display();
 	}
 

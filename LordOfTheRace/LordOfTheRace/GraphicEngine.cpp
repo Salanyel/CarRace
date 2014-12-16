@@ -148,7 +148,7 @@ void GraphicEngine::loadSprite()
 	m_S_hand.setRotation(HAND_BEGIN_POSITION);	
 	
 	m_player.setRadius(2.5);
-	m_player.setFillColor(Color::Green);
+	m_player.setFillColor(Color::Blue);
 	m_player.setPosition(0, 0);
 }
 

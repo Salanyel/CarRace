@@ -8,7 +8,7 @@
 		<Lap value = "3" />
 	</Race>
 	<Race id="02">	
-		<Name value = "TTT" />
+		<Name value = "Cross Roads" />
 		<CarX value = "820" />
 		<CarY value = "339" />
 		<Angle value = "0" />
