@@ -18,5 +18,15 @@
 		<OriginX value="40" />
 		<OriginY value="21" />
 		<Image value="car02.png" />		
+	</Car> 
+	<Car id="03">
+		<Name value="Juliette's Car"/>
+		<SpeedValue value="0.1"/>
+		<SpeedMax value="6"/>
+		<handStep value="23.934" />
+		<speedStep value="19.68" />
+		<OriginX value="34" />
+		<OriginY value="20" />
+		<Image value="car03.png" />			
 	</Car> 	
 </Cars>

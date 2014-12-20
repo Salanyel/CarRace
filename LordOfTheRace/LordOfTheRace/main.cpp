@@ -51,7 +51,7 @@ int main()
 	//Car car(790, 1215, 0, 0);
 	Car car;
 
-	initValue = m_xmlLoader->initGame(2, 1, car, m_graphicEngine, carImage, raceTexture, raceMask, LAP_MAX);
+	initValue = m_xmlLoader->initGame(3, 1, car, m_graphicEngine, carImage, raceTexture, raceMask, LAP_MAX);
 
 	if (initValue != "")
 	{
