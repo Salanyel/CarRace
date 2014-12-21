@@ -24,6 +24,7 @@ public:
 	void initVar();
 	void setStep(float h, float t);
 	void newLap();
+	void restartChronometer();
 	void setCarOnMiniMap(int x, int y);
 	void setTextForDraw(float speed, int lap, int maxLap);
 	void draw(float speed, int lap, int maxLap);

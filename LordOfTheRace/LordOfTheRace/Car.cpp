@@ -68,6 +68,12 @@ void Car::setAngle(float a)
 	angle = a;
 }
 
+void Car::setLap(float l)
+{
+	m_currentLap = l;
+	m_nextLap = false;
+}
+
 float Car::getLap()
 {
 	return m_currentLap;

@@ -113,7 +113,7 @@ string GraphicEngine::initText()
 	m_finalScreen.setFont(m_font);	
 	m_finalScreen.setCharacterSize(30);
 	m_finalScreen.setColor(Color(245, 198, 80));
-	m_finalScreen.setPosition(300, HAND_Y/2);
+	m_finalScreen.setPosition(250, HAND_Y/2);
 
 	m_bestLapText.setFont(m_font);
 	m_bestLapText.setString("Best Lap : 00'00:00");
@@ -204,6 +204,11 @@ void GraphicEngine::newLap()
 		chrono = "Best Lap : " + m + to_string(minutes) + "'" + s + to_string(seconds) + ":" + mS + to_string(milliSeconds);
 		m_bestLapText.setString(chrono);
 	}
+}
+
+void GraphicEngine::restartChronometer()
+{
+	m_chronometer.resetChrono();
 }
 
 void GraphicEngine::setCarOnMiniMap(int x, int y)
@@ -309,7 +314,7 @@ void GraphicEngine::drawFinalScreen()
 		mS = "0";
 
 	display = "Thank you for playing to\n\"Lord of the Race\"\n\n";
-	display = display + "Your best lap : " + m + to_string(minutes) + "'" + s + to_string(seconds) + ":" + mS + to_string(milliSeconds) +"\n\nPress \"Back\" to exit the game.";
+	display = display + "Your best lap : " + m + to_string(minutes) + "'" + s + to_string(seconds) + ":" + mS + to_string(milliSeconds) +"\n\nPress \"Back\" to exit the game.\n\nPress \"START\" to restart the race.";
 
 
 	window.setView(viewMeter);

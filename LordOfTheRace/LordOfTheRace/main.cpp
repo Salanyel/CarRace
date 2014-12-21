@@ -25,6 +25,8 @@ int main()
 	string initValue = m_graphicEngine->initGraphicEngine();
 	string initValue2 = m_xmlLoader->loadFile();
 	int m_gamePadDirection = 0;
+	int carModel = 3;
+	int raceModel = 2;
 
 	//TODO : XInput
 	CXBOXController* Player1;
@@ -46,12 +48,12 @@ int main()
 
 	Texture raceTexture, carImage;
 	Image raceMask;
-	Sprite raceSprite, carSprite;
+	Sprite raceSprite, *carSprite;
 
 	//Car car(790, 1215, 0, 0);
 	Car car;
 
-	initValue = m_xmlLoader->initGame(3, 1, car, m_graphicEngine, carImage, raceTexture, raceMask, LAP_MAX);
+	initValue = m_xmlLoader->initGame(carModel, raceModel, car, m_graphicEngine, carImage, raceTexture, raceMask, LAP_MAX);
 
 	if (initValue != "")
 	{
@@ -60,14 +62,14 @@ int main()
 	}	
 
 	raceSprite.setTexture(raceTexture);
-	carSprite.setTexture(carImage);	
+	carSprite = new Sprite();
+	carSprite->setTexture(carImage);	
 
-	m_xmlLoader->setOrigin(carSprite);
-	carSprite.setScale(0.5, 0.5);	
+	m_xmlLoader->setOrigin(*carSprite);
+	carSprite->setScale(0.5, 0.5);	
 
 	Vector2f center(car.getX(), car.getY());
 	Vector2f halfSize(WINDOW_WIDTH / 3.5, WINDOW_HEIGHT / 3.5);
-	//Vector2f halfSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	View view(center, halfSize);	
 
 	while (app.isOpen())
@@ -111,6 +113,25 @@ int main()
 				if (event.key.code == Keyboard::Escape)
 					app.close();
 			}				
+
+			if (Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START)
+			{
+				initValue = m_xmlLoader->initGame(carModel, raceModel, car, m_graphicEngine, carImage, raceTexture, raceMask, LAP_MAX);
+
+				if (initValue != "")
+				{
+					cout << initValue << endl;
+					return EXIT_FAILURE;
+				}
+
+				carSprite = new Sprite();
+				carSprite->setTexture(carImage);
+
+				m_xmlLoader->setOrigin(*carSprite);
+				carSprite->setScale(0.5, 0.5);
+
+				m_graphicEngine->restartChronometer();
+			}
 		}
 
 		/*
@@ -122,7 +143,7 @@ int main()
 			if (car.getSpeed() > 0)
 			{
 				car.turnLeft();
-				carSprite.setRotation(car.getAngle());
+				carSprite->setRotation(car.getAngle());
 			}			
 		}
 
@@ -131,7 +152,7 @@ int main()
 			if (car.getSpeed() > 0)
 			{
 				car.turnRight();
-				carSprite.setRotation(car.getAngle());
+				carSprite->setRotation(car.getAngle());
 			}
 		}
 
@@ -174,8 +195,8 @@ int main()
 			app.setView(view);
 			view.setCenter(car.getX(), car.getY());
 
-			carSprite.setPosition(car.getX(), car.getY());		
-			app.draw(carSprite);
+			carSprite->setPosition(car.getX(), car.getY());		
+			app.draw(*carSprite);
 		}
 		app.display();
 	}

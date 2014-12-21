@@ -26,6 +26,7 @@ public:
 	void setSpeed(float s);
 	void setSpeedValue(float s);
 	void setSpeedMax(float s);
+	void setLap(float l);
 	float getLap();
 	void setPosition(int _x, int _y);
 	void initTheCar(float sV, float sM);
